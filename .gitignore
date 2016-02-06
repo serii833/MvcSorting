@@ -1,0 +1,9 @@
+packages/
+.vs
+.svn
+[Bb]in/
+[Bb]in
+[Oo]bj
+*.suo
+TestResults/
+*ReSharper*

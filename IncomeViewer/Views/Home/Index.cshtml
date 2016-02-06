@@ -1,0 +1,114 @@
+﻿@using IncomeViewer.Controllers
+@using IncomeViewer.Helpers
+@using IncomeViewer.Models
+@model IncomeViewer.Models.ViewModel<DataItem>
+
+@{
+    Layout = null;
+    PageInfo pageInfo = ViewBag.PageInfo;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+    <style>
+        table, td, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            padding: 3px;
+        }
+
+        .asc {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid red;
+        }
+
+        .desc {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid red;
+        }
+    </style>
+
+    @Scripts.Render("~/bundles/jquery")
+
+    <script>
+        $(document).ready(function () {
+            $('.header').click(function (evt) {
+                var sortFieldId = $(this).attr('sortfieldid');
+                if ($('#SortFieldId').val() === sortFieldId) {
+                    if ($('#SortDirection').val() === 'asc')
+                        $('#SortDirection').val('desc');
+                    else
+                        $('#SortDirection').val('asc');
+                } else {
+                    $('#SortFieldId').val(sortFieldId);
+                    $('#SortDirection').val('asc');
+                }
+
+                evt.preventDefault();
+                $('form').submit();
+            });
+        });
+    </script>
+
+
+
+</head>
+<body>
+    <div>
+        @*        @using (Html.BeginForm("Index", "Home", FormMethod.Post))*@
+        @*        {*@
+        @*            @Html.Hidden("SortFieldId", pageInfo.SortFieldId)*@
+        @*            @Html.Hidden("SortDirection", pageInfo.SortDirection)*@
+        @*        }*@
+
+        <table class=" sortable">
+            <tr>
+                @foreach (var name in Model.Table.GetFields())
+                {
+                    <th><a href="#" class="header" sortFieldId="@name">@Html.Label(name)</a></th>
+                }
+            </tr>
+            @foreach (var row in Model.Table)
+            {
+                <tr>
+                    @foreach (var value in Model.Table.GetRowValues(row))
+                    {
+                        <td>@value</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+
+
+    <div>
+        <table>
+            <tr>
+                <th>@Html.Sortable("Id", "Index")</th>
+                <th>@Html.Sortable("Name", "Index", "Display Name")</th>
+            </tr>
+
+            @foreach (var row in Model.Table)
+            {
+                <tr><td>@row.Id</td><td>@row.Name</td></tr>
+            }
+        </table>
+    </div>
+
+
+</body>
+</html>
